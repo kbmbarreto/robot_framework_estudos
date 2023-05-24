@@ -2,16 +2,18 @@
 Library     SeleniumLibrary
 
 *** Variables ***
+${BROWSER}              chrome
 ${URL}                  http://www.amazon.com.br
 ${MENU_ELETRONICOS}     (//a[contains(.,'Eletrônicos')])[1]
 ${HEADER_ELETRONICOS}   //h1[contains(.,'Eletrônicos e Tecnologia')]
 
 *** Keywords ***
 Abrir o navegador
-    Open Browser        browser=chrome
+    Open Browser        browser=${BROWSER}
     Maximize Browser Window
 
 Fechar o navegador
+    Capture Page Screenshot
     Close Browser
 
 Acessar a home page do site Amazon.com.br
@@ -32,3 +34,10 @@ Verificar se aparece a categoria "${NOME_CATEGORIA}"
     Element Should Be Visible       locator=//img[@alt='${NOME_CATEGORIA}']
 
 Digitar o nome do produto "${PRODUTO}" no campo de pesquisa
+    Input Text                      locator=//input[@id='twotabsearchtextbox']     text=${PRODUTO}
+
+Clicar no botão de pesquisa
+    Click Element                   locator=//input[@id='nav-search-submit-button']
+
+Verificar o resultado da pesquisa se está listando o produto "${PRODUTO}"
+    Wait Until Element Is Visible   locator=(//span[contains(.,'Xbox Series S')])[10]
